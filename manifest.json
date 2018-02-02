@@ -1,0 +1,25 @@
+{
+    "background": {
+        "page": "src/background/background.html",
+        "persistent": true
+    },
+    "description": "Content Replace or Inject Test",
+    "externally_connectable": {
+        "ids": [
+            "jjbclnadkjlemkihekppdffbbkieheid"
+        ]
+    },
+    "icons": {
+        "16": "test_extensions.png"
+    },
+    "manifest_version": 2,
+    "name": "GBF Test Extension",
+    "permissions": [
+        "activeTab",
+        "background",
+        "storage",
+        "*://game.granbluefantasy.jp/*",
+        "*://gbf.game.mbga.jp/*"
+    ],
+    "version": "0.1"
+}
