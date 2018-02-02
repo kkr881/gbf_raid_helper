@@ -1,19 +1,19 @@
 {
     "background": {
-        "page": "src/background/background.html",
+        "scripts": [
+            "src/bg/background.js"
+        ],
         "persistent": true
     },
-    "description": "Content Replace or Inject Test",
-    "externally_connectable": {
-        "ids": [
-            "jjbclnadkjlemkihekppdffbbkieheid"
-        ]
+    "browser_action": {
+        "default_title": "Open Raid Info Popup"
     },
+    "description": "Show Raid Boss Status and Pattern",
     "icons": {
         "16": "test_extensions.png"
     },
     "manifest_version": 2,
-    "name": "GBF Test Extension",
+    "name": "GBF Raid Helper",
     "permissions": [
         "activeTab",
         "background",

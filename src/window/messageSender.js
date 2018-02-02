@@ -126,9 +126,3 @@ function updateDisplay() {
         }
     }
 };
-
-
-$('.ui.progress').progress({
-    duration: 1000,
-    total: 100
-});
