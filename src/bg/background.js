@@ -1,4 +1,5 @@
 var raidInit = false;
+var raidInfoWindow = null;
 
 chrome.browserAction.onClicked.addListener(function(tab) {
     if (!raidInit) {
@@ -24,5 +25,8 @@ chrome.browserAction.onClicked.addListener(function(tab) {
                 raidInit = false;
             }
         });
+    } else {
+        // browserAction 버튼 재클릭 시 focus
+        chrome.windows.update(raidInfoWindow.id, {focused : true});
     }
 });

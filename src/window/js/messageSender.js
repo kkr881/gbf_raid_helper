@@ -1,19 +1,19 @@
-var apiUrl = "chrome-extension://fgpokpknehglcioijejfeebigdnbnokj/content/api.html";
-
-// Use this url when connecting to the API from a website.
-// var apiUrl = "chrome-extension://fgpokpknehglcioijejfeebigdnbnokj/content/api.html";
+var viramateId = 'fgpokpknehglcioijejfeebigdnbnokj'
+var apiUrl = 'chrome-extension://' + viramateId + '/content/api.html';
 
 var isApiLoaded = false;
 var apiHost = null;
 var pendingRequests = {};
 var nextRequestId = 1;
 var combatStateList = [];
+var apiCallCount = 1000;
 
 function onLoad() {
     window.addEventListener("message", onMessage, false);
     tryLoadApi();
     // API 주기
-    window.setInterval(tryRefreshCombatState, 1000);
+    // Viramate example 기준 1초(단위 ms)
+    window.setInterval(tryRefreshCombatState, apiCallCount);
 };
 
 function tryLoadApi() {
@@ -36,9 +36,6 @@ function onMessage(evt) {
     if (evt.data.result && evt.data.result.error) {
         console.log("Request failed", evt.data.result.error);
         return;
-    // 디버깅용 코드
-    // } else {
-    //     console.log("Got request response", evt.data);
     }
 
     var callback = pendingRequests[evt.data.id];
@@ -54,8 +51,7 @@ function sendApiRequest(request, callback) {
         callback({ error: "api not loaded" });
         return;
     }
-    // 디버깅용 코드
-    // console.log("Sending request", request);
+
     var id = nextRequestId++;
     request.id = id;
     pendingRequests[id] = callback;
@@ -65,33 +61,21 @@ function sendApiRequest(request, callback) {
     );
 };
 
-var parseEnemyState = function(enemyData) {
-    return {
-        name: enemyData.name["ja"],
-        id: enemyData.id,
-        hasModeGauge: enemyData.hasModeGauge == 1 ? true : false,
-        modeGauge: enemyData.gauge,
-        hp: enemyData.hp,
-        hpMax: enemyData.hpMax,
-        requireUpdate: true
-    };
-};
-
 function tryRefreshCombatState() {
     sendApiRequest({ type: "getCombatState" }, function (combatState) {
-        if (combatState != null && combatState.enemies != null && combatState.enemies.length > 0) {
+        if (combatState != null && combatState.enemies != null) {
             // 3개체로 시작한 전투일 경우 개체가 죽더라도 API에 내려오는 정보는 3개체
             if(combatStateList.length == 0 || (combatStateList.length != combatState.enemies.length)) {
                 // 이전 전투가 없거나 갱신이 필요할 경우 Display용 배열을 전부 비우고 API 배열 데이터 Parse하여 주입
                 combatStateList = [];
                 for(index in combatState.enemies) {
-                    combatStateList.push(parseEnemyState(combatState.enemies[index]));
+                    combatStateList.push(new EnemyState(combatState.enemies[index]));
                 }
             } else {
                 for (index in combatState.enemies) {
-                    var enemy = parseEnemyState(combatState.enemies[index]);
+                    var enemy = new EnemyState(combatState.enemies[index]);
                     // 동일개체 체크
-                    if (combatStateList[index].id == enemy.id && combatStateList[index].hpMax == enemy.hpMax) {
+                    if (enemy.isSameEnemy(combatStateList[index].id, combatStateList[index].hpMax)) {
                         if (combatStateList[index].hp != enemy.hp) {
                             // HP가 변경되었으므로 데이터 갱신
                             combatStateList[index] = enemy;
@@ -100,16 +84,16 @@ function tryRefreshCombatState() {
                         // 타개체로 인식될 경우 데이터 갱신
                         combatStateList[index] = enemy;
                     }
-                    // 데이터 테스트 코드
-                    // console.log("Boss %s Name : %s", index, combatState.enemies[index].name["ja"]);
-                    // console.log("HP : %d / %d", combatState.enemies[index].hp, combatState.enemies[index].hpMax);
-                    // console.log("Has OD : %s / OD : %d", combatState.enemies[index].hasModeGauge == 1 ? "Y" : "N", combatState.enemies[index].gauge);
                 }
             }
             // Display 갱신
             updateDisplay(combatStateList);
         } else {
+            // 테스트용 - getCombatState가 없을 경우(전투 창이 아닌 경우) 팝업창 강제 종료
+            // 테스트 결과 - 리로드충인 경우 불편 예상 / 옵션화 필요
+            // 옵션 예제 - 한번 창을 띄우면 닫지 않으면 유지 / 전투 상태에 따라 자동 창 닫기
             bossContainerShowHide("N", "N", "N");
+            window.close();
         }
     });
 };
