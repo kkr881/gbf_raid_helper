@@ -4,3 +4,25 @@
 .content .debuff {display: none !important; zoom: 0.5;}
 .content .debuff.show {display: block !important;}
 .content .blank{zoom: 0.5;}
+/* 패턴 영역 숨김 노출 정의 */
+.content.enemy_charge_pattern{display: none !important;}
+.content.enemy_charge_pattern.show{display: block !important;}
+.content.enemy_trigger_pattern{display: none !important;}
+.content.enemy_trigger_pattern.show{display: block !important;}
+.content.enemy_comment{display: none !important;}
+.content.enemy_comment.show{display: block !important;}
+/* 차지턴 맥스일 때 해당 영역 깜빡임 효과 */
+.enemy_charge_pattern.alert {
+    -webkit-animation: ALERT-CHARGE-MAX 1s infinite;
+    -moz-animation: ALERT-CHARGE-MAX 1s infinite;
+    -o-animation: ALERT-CHARGE-MAX 1s infinite;
+    animation: ALERT-CHARGE-MAX 1s infinite;
+}
+@-webkit-keyframes ALERT-CHARGE-MAX {
+    0%, 49% {background-color: white;}
+    50%, 100% {background-color: red;}
+}
+@keyframes ALERT-CHARGE-MAX {
+    0%, 49% {background-color: white;}
+    50%, 100% {background-color: red;}
+}

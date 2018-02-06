@@ -11,9 +11,43 @@ var updateDisplay = function (enemyStateList) {
                 // 프로그래스 바 표기
                 updateProgressBar($bossEl, enemyState);
                 // pattern 표기
+                updatePatternArea($bossEl, enemyState);
                 enemyState.requireUpdate = false;
             }
         }
+    }
+};
+
+var updatePatternArea = function($el, enemyState) {
+    let $chargeEl = $el.parent().find('.enemy_charge_pattern');
+    let $triggerEl = $el.parent().find('.enemy_trigger_pattern');
+    let $commentEl = $el.parent().find('.enemy_comment');
+    if(!bossPattern.hasBossPattern(enemyState.id)) {
+        $chargeEl.removeClass('show');
+        $triggerEl.removeClass('show');
+        $commentEl.removeClass('show');
+        return false;
+    }
+    // 차지턴 패턴 영역
+    
+    // 체력 트리거 영역
+    let enemyTriggerObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "hpTrigger", enemyState.getPerHp);
+    if(enemyTriggerObj == null) {
+        $triggerEl.removeClass('show');
+    } else {
+        $triggerEl.find('.header').text(enemyTriggerObj.title);
+        $triggerEl.find('.description').text(enemyTriggerObj.desc);
+        $triggerEl.addClass('show');
+    }
+    // 체력별 부가정보
+    
+    let enemyCommentObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "comment", enemyState.getPerHp);
+    if(enemyCommentObj == null) {
+        $commentEl.removeClass('show');
+    } else {
+        $commentEl.find('.header').text(enemyCommentObj.title);
+        $commentEl.find('.description').text(enemyCommentObj.desc);
+        $commentEl.addClass('show');
     }
 };
 

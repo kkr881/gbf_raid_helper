@@ -12,7 +12,8 @@ var ModeState = {
 
 var enemyDebuffStateList = [
     { id: '1102', className: 'paralysis' },
-    { id: '1374', className: 'fear' }
+    { id: '1374', className: 'fear' },
+    { id: '1101', className: 'attracted' }
 ];
 
 var WindowSize = {
