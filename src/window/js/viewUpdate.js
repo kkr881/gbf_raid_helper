@@ -1,28 +1,46 @@
-var WindowSize = {
-    1: { width: 333 },
-    2: { width: 640 },
-    3: { width: 942 },
-    height: 500
-};
+"use strict";
 
-var updateDisplay = function (combatStateList) {
-    if (combatStateList.length > 0) {
-        updateBossContainer(combatStateList.length);
-        for (index in combatStateList) {
-            if (combatStateList[index].requireUpdate) {
-                // 이름 및 HP 표기
+var updateDisplay = function (enemyStateList) {
+    if (enemyStateList.length > 0) {
+        updateBossContainer(enemyStateList.length);
+        for (let [index, enemyState] of enemyStateList.entries()) {
+            if (enemyState.requireUpdate) {
                 var $bossEl = $('#enemy' + index).parents('.content');
-                $bossEl.find('.boss_name').text(combatStateList[index].name);
+                // 이름 및 주요 디버프 표기
+                updateEnemyState($bossEl, enemyState);
                 // 프로그래스 바 표기
-                updateProgressBar($bossEl, combatStateList[index]);
+                updateProgressBar($bossEl, enemyState);
                 // pattern 표기
-                combatStateList[index].requireUpdate = false;
+                enemyState.requireUpdate = false;
             }
         }
     }
 };
 
+// "http://game-a1.granbluefantasy.jp/assets_en/img/sp/ui/icon/status/x64/status_" + (statusOverride || obj.status) + ".png')"
+// 버프 디버프 아이콘 주소
+// 버프 디버프 노출 조건을 어떻게 할지 고민 필요
+// 임시로 마비 공포 상태는 노출되도록
+// 마비 id 1102
+// 공포 id 1374
+
+var updateEnemyState = function ($el, enemyState) {
+    // 보스 이미지 노출
+    $el.find('.boss_portrait').attr('src', enemyState.getBossPortraitUrl());
+    // 이름 및 주요 디버프 표기
+    $el.find('.boss_name').text(enemyState.name);
+
+    if (enemyState.conditions.length > 0) {
+        for (let debuffState of enemyDebuffStateList) {
+            enemyState.conditions.includes(debuffState.id)
+                ? $el.find('.' + debuffState.className).addClass('show')
+                : $el.find('.' + debuffState.className).removeClass('show');
+        }
+    }
+};
+
 var updateProgressBar = function ($el, enemyState) {
+    // HP 퍼센트 표기
     $el.find('.progress').progress({
         percent: enemyState.getPerHp()
     });
@@ -68,7 +86,4 @@ var bossContainerShowHide = function (c1, c2, c3) {
     } else {
         $bossElList.eq(2).is(":visible") ? $bossElList.eq(2).hide() : '';
     }
-
-
-
 };

@@ -1,3 +1,5 @@
+"use strict";
+
 var raidInit = false;
 var raidInfoWindow = null;
 

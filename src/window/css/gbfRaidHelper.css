@@ -1,0 +1,6 @@
+.container {padding: 1em 1em 1em;}
+.progress .label.red {color:red !important;}
+.progress .label.yellow {color:orange !important;}
+.content .debuff {display: none !important; zoom: 0.5;}
+.content .debuff.show {display: block !important;}
+.content .blank{zoom: 0.5;}

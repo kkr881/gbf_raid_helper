@@ -3,15 +3,10 @@
 <head>
     <title>Raid Info</title>
     <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="css/gbfRaidHelper.css">
+    <script src="lib/customDefine.js"></script>
     <script src="lib/jquery-3.1.1.min.js"></script>
     <script src="lib/semantic.min.js"></script>
-    <style>
-        .container {
-            padding: 1em 1em 1em;
-        }
-        .progress .label.red { color:red !important;}
-        .progress .label.yellow { color:orange !important;}
-    </style>
 </head>
 
 <body>
@@ -19,7 +14,11 @@
         <div class="ui cards">
             <div class="card enemy_info" style="display: none">
                 <div class="content enemy_state">
+                    <img class="left floated mini ui image boss_portrait">
                     <div class="header boss_name">Boss 1</div>
+                    <img class="debuff paralysis" src="http://game-a1.granbluefantasy.jp/assets_en/img/sp/ui/icon/status/x64/status_1102.png">
+                    <img class="debuff fear" src="http://game-a1.granbluefantasy.jp/assets_en/img/sp/ui/icon/status/x64/status_1374.png">
+                    <img class="blank" src="img/status_blank.png">
                     <div class="ui indicating progress" data-value="100" data-total="100" id="enemy0">
                         <div class="bar">
                             <div class="progress"></div>
@@ -29,7 +28,7 @@
                     <div class="gauge"></div>
                 </div>
                 <div class="content enemy_pattern">
-                        
+
                 </div>
                 <div class="extra content enemy_comment">
 
@@ -37,33 +36,45 @@
             </div>
             <div class="card enemy_info" style="display: none">
                 <div class="content enemy_state">
+                    <img class="left floated mini ui image boss_portrait">
                     <div class="header boss_name">Boss 2</div>
+                    <img class="debuff paralysis" src="http://game-a1.granbluefantasy.jp/assets_en/img/sp/ui/icon/status/x64/status_1102.png">
+                    <img class="debuff fear" src="http://game-a1.granbluefantasy.jp/assets_en/img/sp/ui/icon/status/x64/status_1374.png">
+                    <img class="blank" src="img/status_blank.png">
                     <div class="ui indicating progress" data-value="100" data-total="100" id="enemy1">
                         <div class="bar">
                             <div class="progress"></div>
                         </div>
+                        <div class="label"></div>
                     </div>
+                    <div class="gauge"></div>
                 </div>
-                <div class="content">
+                <div class="content enemy_pattern">
 
                 </div>
-                <div class="extra content">
+                <div class="extra content enemy_comment">
 
                 </div>
             </div>
             <div class="card enemy_info" style="display: none">
                 <div class="content enemy_state">
+                    <img class="left floated mini ui image boss_portrait">
                     <div class="header boss_name">Boss 3</div>
+                    <img class="debuff paralysis" src="http://game-a1.granbluefantasy.jp/assets_en/img/sp/ui/icon/status/x64/status_1102.png">
+                    <img class="debuff fear" src="http://game-a1.granbluefantasy.jp/assets_en/img/sp/ui/icon/status/x64/status_1374.png">
+                    <img class="blank" src="img/status_blank.png">
                     <div class="ui indicating progress" data-value="100" data-total="100" id="enemy2">
                         <div class="bar">
                             <div class="progress"></div>
                         </div>
+                        <div class="label"></div>
                     </div>
+                    <div class="gauge"></div>
                 </div>
-                <div class="content">
+                <div class="content enemy_pattern">
 
                 </div>
-                <div class="extra content">
+                <div class="extra content enemy_comment">
 
                 </div>
             </div>
@@ -72,6 +83,7 @@
     </div>
     <iframe id="api_host" style="display: none"></iframe>
 
+    <script src="js/defineObject.js"></script>
     <script src="js/enemyState.js"></script>
     <script src="js/viewUpdate.js"></script>
     <script src="js/messageSender.js"></script>
