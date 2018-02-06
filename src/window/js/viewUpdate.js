@@ -12,9 +12,20 @@ var updateDisplay = function (enemyStateList) {
                 updateProgressBar($bossEl, enemyState);
                 // pattern 표기
                 updatePatternArea($bossEl, enemyState);
+                updateBossContainer(enemyStateList.length);
                 enemyState.requireUpdate = false;
             }
         }
+    }
+};
+
+var insertObjByEl = function($el, obj) {
+    if(obj == null) {
+        $el.removeClass('show');
+    } else {
+        $el.find('.header').html(obj.title.replace(/\n/g, '<br>'));
+        $el.find('.description').html(obj.desc.replace(/\n/g, '<br>'));
+        $el.addClass('show');
     }
 };
 
@@ -31,24 +42,12 @@ var updatePatternArea = function($el, enemyState) {
     // 차지턴 패턴 영역
     
     // 체력 트리거 영역
-    let enemyTriggerObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "hpTrigger", enemyState.getPerHp);
-    if(enemyTriggerObj == null) {
-        $triggerEl.removeClass('show');
-    } else {
-        $triggerEl.find('.header').text(enemyTriggerObj.title);
-        $triggerEl.find('.description').text(enemyTriggerObj.desc);
-        $triggerEl.addClass('show');
-    }
-    // 체력별 부가정보
+    let enemyTriggerObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "hpTrigger", enemyState.getPerHp());
+    insertObjByEl($triggerEl, enemyTriggerObj);
     
-    let enemyCommentObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "comment", enemyState.getPerHp);
-    if(enemyCommentObj == null) {
-        $commentEl.removeClass('show');
-    } else {
-        $commentEl.find('.header').text(enemyCommentObj.title);
-        $commentEl.find('.description').text(enemyCommentObj.desc);
-        $commentEl.addClass('show');
-    }
+    // 체력별 부가정보
+    let enemyCommentObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "comment", enemyState.getPerHp());
+    insertObjByEl($commentEl, enemyCommentObj);
 };
 
 // "http://game-a1.granbluefantasy.jp/assets_en/img/sp/ui/icon/status/x64/status_" + (statusOverride || obj.status) + ".png')"

@@ -2,7 +2,7 @@
 .progress .label.red {color:red !important;}
 .progress .label.yellow {color:orange !important;}
 .content .debuff {display: none !important; zoom: 0.5;}
-.content .debuff.show {display: block !important;}
+.content .debuff.show {display: inline-block !important;}
 .content .blank{zoom: 0.5;}
 /* 패턴 영역 숨김 노출 정의 */
 .content.enemy_charge_pattern{display: none !important;}
