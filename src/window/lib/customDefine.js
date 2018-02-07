@@ -24,3 +24,12 @@ var equalsArray = function (array1, array2) {
     }       
     return true;
 }
+
+// JSON의 \n을 html 의 <br>태그로 전환
+var replaceNewLine = function(str, type) {
+    if(type == 'html') {
+        return str.replace(/\n/g, '<br>');
+    } else if(type == 'json') {
+        return str.replace(/<br>/g, '\n');
+    }
+}

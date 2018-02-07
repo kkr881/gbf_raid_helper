@@ -34,11 +34,14 @@ class EnemyState {
     // recast == 1인 경우 차지턴 MAX
     // 해당 부분 관련하여 좀 더 확인 필요
     isMaxChargeTurn() {
-        return this.recast == 1 ? true : false;
+        return (ModeState.BREAK != this.mode) && (this.recast == 1) ? true : false;
     }
     // 현재 Mode에 맞는 명칭 반환
     getModeStateName() {
         return ModeState.properties[this.mode].name;
+    }
+    getModeStatePatternType() {
+        return ModeState.properties[this.mode].patternType;
     }
     // HP와 HPMAX 값을 퍼센트로 반환
     getPerHp() {

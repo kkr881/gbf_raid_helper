@@ -20,6 +20,7 @@
                     <div class="header boss_name">Boss 1</div>
                     <img class="debuff paralysis" src="http://game-a1.granbluefantasy.jp/assets_en/img/sp/ui/icon/status/x64/status_1102.png">
                     <img class="debuff fear" src="http://game-a1.granbluefantasy.jp/assets_en/img/sp/ui/icon/status/x64/status_1374.png">
+                    <img class="debuff attracted" src="http://game-a1.granbluefantasy.jp/assets_en/img/sp/ui/icon/status/x64/status_1101.png">
                     <img class="blank" src="img/status_blank.png">
                     <div class="ui indicating progress" data-value="100" data-total="100" id="enemy0">
                         <div class="bar">
@@ -27,26 +28,15 @@
                         </div>
                         <div class="label"></div>
                     </div>
-                    <div class="gauge"></div>
                 </div>
-                <!-- 차지턴 패턴 / 노말 OD에 따라 다를 경우 현재 모드 상태에 따라 노출 / 타입별 공통 모드도 있음-->
-                <div class="content enemy_charge_pattern">
-                    <div class="header"></div>
-                    <div class="description"></div>
-                    <div class="header"></div>
-                    <div class="description"></div>
-                </div>
+                <!-- 공통 패턴 -->
+                <div class="content enemy_pattern enemy_common_pattern"></div>
+                <!-- 차지턴 패턴 / 노말 OD에 따라 다를 경우 현재 모드 상태에 따라 노출-->
+                <div class="content enemy_pattern enemy_charge_pattern"></div>
                 <!-- 체력 트리거 있을경우 정보 노출 / 없을 경우 숨김필요-->
-                <div class="content enemy_trigger_pattern">
-                    <div class="header"></div>
-                    <div class="meta"></div>
-                    <div class="description"></div>
-                </div>
+                <div class="content enemy_pattern enemy_trigger_pattern"></div>
                 <!-- 체력별 부가 정보 -->
-                <div class="content enemy_comment">
-                    <div class="header"></div>
-                    <div class="description"></div>
-                </div>
+                <div class="content enemy_pattern enemy_comment"></div>
             </div>
             <div class="card enemy_info" style="display: none">
                 <div class="content enemy_state">
@@ -61,7 +51,6 @@
                         </div>
                         <div class="label"></div>
                     </div>
-                    <div class="gauge"></div>
                 </div>
                 <!-- 차지턴 패턴 / 노말 OD에 따라 다를 경우 현재 모드 상태에 따라 노출-->
                 <div class="content enemy_charge_pattern"></div>
@@ -81,7 +70,6 @@
                         </div>
                         <div class="label"></div>
                     </div>
-                    <div class="gauge"></div>
                 </div>
                 <!-- 차지턴 패턴 / 노말 OD에 따라 다를 경우 현재 모드 상태에 따라 노출-->
                 <div class="content enemy_charge_pattern"></div>

@@ -19,38 +19,45 @@ var updateDisplay = function (enemyStateList) {
     }
 };
 
-var insertObjByEl = function($el, obj, pattern) {
+var insertObjByEl = function($el, obj, pattern = null) {
     if(obj == null) {
         $el.removeClass('show');
     } else {
-        $el.find('.header').html(obj.patternInfo.title.replace(/\n/g, '<br>'));
-        if(pattern == 'trigger') {
-            $el.find('.meta').html(`체력 ${obj.patternPerHp}%에 발동`);
+        if(Array.isArray(obj.patternInfo)) {
+            $el.html(multiPatternTemplate(obj.patternInfo, obj.type));
+        } else {
+            $el.html(singlePatternTemplate(obj.patternInfo, pattern == 'trigger' ? obj.patternPerHp : null));
         }
-        $el.find('.description').html(obj.patternInfo.desc.replace(/\n/g, '<br>'));
         $el.addClass('show');
     }
 };
 
 var updatePatternArea = function($el, enemyState) {
-    let $chargeEl = $el.parent().find('.enemy_charge_pattern');
-    let $triggerEl = $el.parent().find('.enemy_trigger_pattern');
-    let $commentEl = $el.parent().find('.enemy_comment');
     if(!bossPattern.hasBossPattern(enemyState.id)) {
-        $chargeEl.removeClass('show');
-        $triggerEl.removeClass('show');
-        $commentEl.removeClass('show');
+        $el.parent().find('.enemy_pattern').removeClass('show');
         return false;
     }
-    // 차지턴 패턴 영역
-    
-    // 체력 트리거 영역
+        
+    // 공통 패턴 조회
+    let $commonEl = $el.parent().find('.enemy_common_pattern');
+    let enemyCommonObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "commonMode", enemyState.getPerHp());
+    insertObjByEl($commonEl, enemyCommonObj);
+    // 차지턴 패턴 조회
+    let $chargeEl = $el.parent().find('.enemy_charge_pattern');
+    let enemyChargeObj = bossPattern.getTypeByPatternPerHp(enemyState.id, enemyState.getModeStatePatternType(), enemyState.getPerHp());
+    insertObjByEl($chargeEl, enemyChargeObj);
+    // 체력 트리거 조회
+    let $triggerEl = $el.parent().find('.enemy_trigger_pattern');
     let enemyTriggerObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "hpTrigger", enemyState.getPerHp());
     insertObjByEl($triggerEl, enemyTriggerObj, 'trigger');
-    
     // 체력별 부가정보
+    let $commentEl = $el.parent().find('.enemy_comment');
     let enemyCommentObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "comment", enemyState.getPerHp());
-    insertObjByEl($commentEl, enemyCommentObj, 'comment');
+    insertObjByEl($commentEl, enemyCommentObj);
+
+    // 차지턴 MAX일 경우 경고
+    let $alertEl = $el.parent().find('.enemy_common_pattern, .enemy_charge_pattern');
+    enemyState.isMaxChargeTurn() ? $alertEl.addClass('alert') : $alertEl.removeClass('alert');
 };
 
 // "http://game-a1.granbluefantasy.jp/assets_en/img/sp/ui/icon/status/x64/status_" + (statusOverride || obj.status) + ".png')"

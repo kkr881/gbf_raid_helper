@@ -1,7 +1,6 @@
 // bossPattern은 enemyState의 id기반
 // 차후 좀 더 편한 형태 고려
 // 826100 : 세레마그HL
-// 9900504 : 테스트 몬스터
 var bossPattern = {
     826100: {
         name: 'Lv100 세레스트·마그나',
@@ -17,19 +16,19 @@ var bossPattern = {
             0: { title: '비고', desc: '기절 해제' }
         },
         commonMode: {
-            75: { title: '검은 안개', desc: '아군 전체에 부패 5턴' },
-            50: { title: '어두운 감옥', desc: '단일 아군에게 그림자 3턴, 적개심 UP 3턴, 언데드 3턴 ' },
-            0: { title: '안락사(발동률 높음)', desc: '아군 전체 수면 1~5턴, 언데드 5턴' },
+            75: [{ title: '검은 안개', desc: '아군 전체에 부패 5턴' }],
+            50: [{ title: '어두운 감옥', desc: '단일 아군에게 그림자 3턴, 적개심 UP 3턴, 언데드 3턴 ' }],
+            0: [{ title: '안락사(발동률 높음)', desc: '아군 전체 수면 1~5턴, 언데드 5턴' }],
         },
         normalMode: {
-            75: { title: '하얀 안개', desc: '전체 무속성 데미지(최대 체력의 5%), 3분간 보스의 약화 내성' },
-            50: { title: '통합', desc: '보스에게 환영(무제한)' },
-            0: { title: '나락의 폴 다운', desc: '아군 전체 암속성 데미지, 어빌리티 봉인 3턴' }
+            75: [{ title: '하얀 안개', desc: '전체 무속성 데미지(최대 체력의 5%), 3분간 보스의 약화 내성' }],
+            50: [{ title: '통합', desc: '보스에게 환영(무제한)' }],
+            0: [{ title: '나락의 폴 다운', desc: '아군 전체 암속성 데미지, 어빌리티 봉인 3턴' }]
         },
         overDriveMode: {
-            75: { title: '보이드', desc: '아군 전체 어빌봉인 1턴, 언데드 3턴, 재생 3턴' },
-            50: { title: '푸른 번개', desc: '아군 전체 무속성 데미지(최대 체력의 15%), 보스의 약화 효과 하나 회복' },
-            0: { title: '보이드 올', desc: '아군 전체 HP 전부 회복, 부패 6턴(턴당 데미지 300), 암흑 5턴' }
+            75: [{ title: '보이드', desc: '아군 전체 어빌봉인 1턴, 언데드 3턴, 재생 3턴' }],
+            50: [{ title: '푸른 번개', desc: '아군 전체 무속성 데미지(최대 체력의 15%), 보스의 약화 효과 하나 회복' }],
+            0: [{ title: '보이드 올', desc: '아군 전체 HP 전부 회복, 부패 6턴(턴당 데미지 300), 암흑 5턴' }]
         }
     },
     // 패턴 존재 여부 체크
@@ -45,24 +44,24 @@ var bossPattern = {
         let nowPatternPerHp = null;
         for (i = 0; i < patternPerHpList.length; i++) {
             let patternPerHp = patternPerHpList[i];
-            let afterPatternPerHp = i +1 < patternPerHpList.length ?patternPerHpList[i+1] : null;
+            let afterPatternPerHp = i + 1 < patternPerHpList.length ? patternPerHpList[i + 1] : null;
             // 첫번째 패턴이 현재 HP보다 클 경우 패턴이 없음
-            if(i == 0 && patternPerHp > perHp) {
+            if (i == 0 && patternPerHp > perHp) {
                 return null;
             }
             // 현재 HP와 해당하는 패턴이 동일할 경우 해당하는 패턴 노출
-            if(afterPatternPerHp == perHp) {
+            if (afterPatternPerHp == perHp) {
                 nowPatternPerHp = afterPatternPerHp;
                 break;
             }
 
             // 현재 HP와 해당하는 패턴이 동일하거나
             // patternPerHp가 patternPerHPList의 마지막일 경우
-            if(patternPerHp == perHp || afterPatternPerHp == null) {
+            if (patternPerHp == perHp || afterPatternPerHp == null) {
                 nowPatternPerHp = patternPerHp;
                 break;
             } else {
-                if(afterPatternPerHp > perHp && perHp > patternPerHp) {
+                if (afterPatternPerHp > perHp && perHp > patternPerHp) {
                     nowPatternPerHp = patternPerHp;
                     break;
                 } else {
@@ -72,8 +71,9 @@ var bossPattern = {
         }
         // nowPatternPerHp 값 체크 후 패턴 Object 반환
         return {
-            patternPerHp : nowPatternPerHp,
-            patternInfo : this[id][patternType][nowPatternPerHp]
+            patternPerHp: nowPatternPerHp,
+            type: patternType,
+            patternInfo: this[id][patternType][nowPatternPerHp]
         };
     }
 };

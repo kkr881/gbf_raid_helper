@@ -94,7 +94,7 @@ function tryRefreshCombatState() {
             // 테스트용 - getCombatState가 없을 경우(전투 창이 아닌 경우) 팝업창 강제 종료
             // 테스트 결과 - 리로드충인 경우 불편 예상 / 옵션화 필요
             // 옵션 예제 - 한번 창을 띄우면 닫지 않으면 유지 / 전투 상태에 따라 자동 창 닫기
-            bossContainerShowHide("N", "N", "N");
+            // bossContainerShowHide("N", "N", "N");
             window.close();
         }
     });
