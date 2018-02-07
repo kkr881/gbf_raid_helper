@@ -1,8 +1,6 @@
 {
     "background": {
-        "scripts": [
-            "src/bg/background.js"
-        ],
+        "page": "src/bg/background.html",
         "persistent": true
     },
     "browser_action": {
