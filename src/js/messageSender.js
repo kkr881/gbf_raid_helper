@@ -15,7 +15,9 @@ function onLoad() {
     tryLoadApi();
     // API 주기
     // Viramate example 기준 1초(단위 ms)
-    window.setInterval(tryRefreshCombatState, apiCallCount);
+    var apiTimer = new timer();
+    apiTimer.start(tryRefreshCombatState, apiCallCount, false);
+    // window.setInterval(tryRefreshCombatState, apiCallCount);
 };
 
 function tryLoadApi() {

@@ -2,7 +2,7 @@
 
 var updateDisplay = function (enemyStateList) {
     if (enemyStateList.length > 0) {
-        updateBossContainer(enemyStateList.length);
+        ///updateBossContainer(enemyStateList.length);
         for (let [index, enemyState] of enemyStateList.entries()) {
             if (enemyState.requireUpdate) {
                 var $bossEl = $('#enemy' + index).parents('.content');

@@ -12,6 +12,7 @@
     },
     "manifest_version": 2,
     "name": "GBF Raid Helper",
+    "options_page": "src/option/option.html",
     "permissions": [
         "activeTab",
         "background",

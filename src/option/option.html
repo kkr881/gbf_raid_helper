@@ -1,0 +1,93 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Option Page</title>
+    <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/gbfRaidHelper.css">
+    <script src="../lib/customDefine.js"></script>
+    <script src="../lib/jquery-3.1.1.min.js"></script>
+    <script src="../lib/semantic.min.js"></script>
+</head>
+
+<body class="option">
+    <div class="ui secondary pointing menu">
+        <a class="active item popup">팝업 설정</a>
+        <a class="item about">정보</a>
+    </div>
+    <div class="ui segment">
+        <div class="area popup show">
+            <div class="ui items">
+                <div class="item popup_position">
+                    <div class="content">
+                        <div class="header">보스 패턴 팝업 노출 위치</div>
+                        <div class="meta">
+                            <span>(게임 창 기준)</span>
+                        </div>
+                        <div class="description">
+                            <div class="field">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" name="position" value="left">
+                                    <label>왼쪽</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" name="position" value="right">
+                                    <label>오른쪽</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item popup_onoff">
+                    <div class="content">
+                        <div class="header">보스 패턴 팝업 노출</div>
+                        <div class="description">
+                            <div class="ui slider checkbox">
+                                <input type="checkbox" name="onoff">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="content">
+                        <div class="header">Viramate Extension ID </div>
+                        <div class="meta">
+                            <span>(Viramate를 리패킹 한 경우에만 변경할 것)</span>
+                        </div>
+                        <div class="description">
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="content">
+                        <div class="header">Viramate WebAPI 호출 주기
+                        </div>
+                        <div class="meta">
+                            <span>(단위 : 밀리초)</span>
+                        </div>
+                        <div class="description">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="area about">
+            해당 Extension은 Viramate WebAPI 기반으로 제작되었습니다.
+            <br> 반드시 Viramate Extension을 설치 후 옵션의 WebAPI를 켜셔야 해당 Extension이 동작 가능합니다.
+            <p></p>
+            사용상 버그나 기능 제안은
+            <a target="_blank" href="https://github.com/kkr881/gbf_raid_helper/issues">여기</a>에 올려주세요.
+            <br> 버그나 기능 제안 외에 보스 패턴 정보가 누락되거나 잘못나오는 경우에도 올려주시면 감사하겠습니다.
+            <p></p>
+            개발자 : 그랑블루 판타지 갤러리
+            <a target="_blank" href="http://gallog.dcinside.com/kkr88">브륭</a>
+        </div>
+    </div>
+    <script src="option.js"></script>
+</body>
+
+</html>

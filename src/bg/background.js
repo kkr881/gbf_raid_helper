@@ -1,24 +1,51 @@
 "use strict";
 
-var viramateId = 'fgpokpknehglcioijejfeebigdnbnokj'
-var apiUrl = 'chrome-extension://' + viramateId + '/content/api.html';
-
 var isApiLoaded = false;
 var apiHost = null;
 var pendingRequests = {};
 var nextRequestId = 1;
-var enemyStateList = [];
-var apiCallCount = 1000;
+var enemyCount = 0;
 
 var raidInit = false;
 var raidInfoWindow = null;
+var popupPosition = 'right';
+var popupEnable = true;
+var viramateId = 'fgpokpknehglcioijejfeebigdnbnokj'
+var apiCallCount = 1000;
+
+var apiUrl = 'chrome-extension://' + viramateId + '/content/api.html';
+
+function initSetting() {
+    chrome.storage.local.get(null, result => {
+        //스토리지 초기화 안된 상태
+        if (typeof result['initalized'] === 'undefined') {
+            var setting = {
+                'initalized': true,
+                'popupPosition': 'right',
+                'popupEnable': true,
+                'viramateId': 'fgpokpknehglcioijejfeebigdnbnokj',
+                'apiCallCount': 1000
+            };
+            chrome.storage.local.set(setting, () => {
+                console.log('Setting Initalized.');
+            });
+        } else {
+            result['popupPosition'] = popupPosition;
+            result['popupEnable'] = popupEnable;
+            result['viramateId'] = viramateId;
+            result['apiCallCount'] = apiCallCount;
+        }
+        onLoad();
+    });
+}
 
 function onLoad() {
     window.addEventListener("message", onMessage, false);
     tryLoadApi();
     // API 주기
     // Viramate example 기준 1초(단위 ms)
-    window.setInterval(tryRefreshCombatState, apiCallCount);
+    var apiTimer = new timer();
+    apiTimer.start(tryRefreshCombatState, apiCallCount, false);
 };
 
 function tryLoadApi() {
@@ -69,16 +96,15 @@ function sendApiRequest(request, callback) {
 function tryRefreshCombatState() {
     sendApiRequest({ type: "getCombatState" }, function (combatState) {
         if (combatState != null && combatState.enemies != null) {
-            if (!raidInit) {
+            if (!raidInit && popupEnable) {
+                enemyCount = combatState.enemies.length;
                 chrome.windows.getCurrent(function (win) {
-                    var width = 440;
-                    var height = 600;
-                    var left = win.left + win.width;
+                    var left = popupPosition == 'left' ? win.left + win.width : win.left - WindowSize[enemyCount].width;
 
                     chrome.windows.create({
-                        url: chrome.runtime.getURL("src/window/raid_info.html"),
-                        width: width,
-                        height: height,
+                        url: chrome.runtime.getURL("src/raid_info.html"),
+                        width: WindowSize[enemyCount].width,
+                        height: WindowSize.height,
                         //top: Math.round(top),
                         left: Math.round(left),
                         type: 'panel'
@@ -88,7 +114,7 @@ function tryRefreshCombatState() {
                 });
                 raidInit = true;
                 chrome.windows.onRemoved.addListener(function (windowId) {
-                    if (raidInfoWindow.id == windowId) {
+                    if (raidInfoWindow == null || raidInfoWindow.id == windowId) {
                         raidInit = false;
                         raidInfoWindow = null;
                     }
@@ -108,11 +134,36 @@ function tryRefreshCombatState() {
     });
 };
 
-window.addEventListener("DOMContentLoaded", onLoad, false);
+window.addEventListener("DOMContentLoaded", initSetting, false);
 
 // focus 기능
 chrome.browserAction.onClicked.addListener(function (tab) {
     if (raidInfoWindow != null) {
         chrome.windows.update(raidInfoWindow.id, { focused: true });
+    }
+});
+
+chrome.storage.onChanged.addListener(function (changes, namespace) {
+    let optionKeys = Object.keys(changes);
+    for (let key of optionKeys) {
+        switch (key) {
+            case 'popupPosition':
+                popupPosition = changes[key].newValue;
+                if (raidInfoWindow != null) {
+                    chrome.windows.getCurrent(function (win) {
+                        var left = popupPosition == 'left' ? win.left + win.width : win.left - WindowSize[enemyCount].width;
+                        chrome.windows.update(raidInfoWindow.id, { left: Math.round(left) });
+                    });
+                }
+                break;
+            case 'popupEnable':
+                popupEnable = changes[key].newValue;
+                if (!popupEnable &&raidInfoWindow != null) {
+                    chrome.windows.remove(raidInfoWindow.id);
+                    raidInit = false;
+                    raidInfoWindow = null;
+                }
+                break;
+        }
     }
 });
