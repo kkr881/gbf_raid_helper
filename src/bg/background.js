@@ -30,10 +30,10 @@ function initSetting() {
                 console.log('Setting Initalized.');
             });
         } else {
-            result['popupPosition'] = popupPosition;
-            result['popupEnable'] = popupEnable;
-            result['viramateId'] = viramateId;
-            result['apiCallCount'] = apiCallCount;
+            popupPosition = result['popupPosition'];
+            popupEnable = result['popupEnable'];
+            viramateId = result['viramateId'];
+            apiCallCount = result['apiCallCount'];
         }
         onLoad();
     });
