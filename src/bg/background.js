@@ -95,7 +95,8 @@ function tryRefreshCombatState() {
                 });
             } else {
                 // browserAction 버튼 재클릭 시 focus
-                chrome.windows.update(raidInfoWindow.id, { focused: true });
+                // 주기별로 계속 반복되는 오류로 주석처리
+                //chrome.windows.update(raidInfoWindow.id, { focused: true });
             }
         } else {
             if (raidInfoWindow != null) {
@@ -109,7 +110,7 @@ function tryRefreshCombatState() {
 
 window.addEventListener("DOMContentLoaded", onLoad, false);
 
-// focus 기능만 동작하도록
+// focus 기능
 chrome.browserAction.onClicked.addListener(function (tab) {
     if (raidInfoWindow != null) {
         chrome.windows.update(raidInfoWindow.id, { focused: true });

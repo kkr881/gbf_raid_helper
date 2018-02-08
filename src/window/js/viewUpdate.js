@@ -72,7 +72,11 @@ var updateEnemyState = function ($el, enemyState) {
     $el.find('.boss_portrait').attr('src', enemyState.getBossPortraitUrl());
     // 이름 및 주요 디버프 표기
     $el.find('.boss_name').text(enemyState.name);
-
+    // 임시 패턴 존재 여부 정보 노출용
+    // 패턴이 없는 보스일 경우 해당 보스의 ID 노출
+    bossPattern.hasBossPattern(enemyState.id)
+        ? $el.find('.pattern_check').text(`패턴이 존재합니다.`)
+        : $el.find('.pattern_check').text(`패턴 없음. 보스 ID : ${enemyState.id}`);
     if (enemyState.conditions.length > 0) {
         for (let debuffState of enemyDebuffStateList) {
             enemyState.conditions.includes(debuffState.id)
