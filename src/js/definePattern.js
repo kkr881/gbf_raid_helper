@@ -1,6 +1,7 @@
 // bossPattern은 enemyState의 id기반
 // 차후 좀 더 편한 형태 고려
 // 826100 : 세레마그HL
+// 600050 : 티아마그
 var bossPattern = {
     826100: {
         name: 'Lv100 세레스트·마그나',

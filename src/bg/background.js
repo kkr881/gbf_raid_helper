@@ -99,7 +99,7 @@ function tryRefreshCombatState() {
             if (!raidInit && popupEnable) {
                 enemyCount = combatState.enemies.length;
                 chrome.windows.getCurrent(function (win) {
-                    var left = popupPosition == 'left' ? win.left + win.width : win.left - WindowSize[enemyCount].width;
+                    var left = popupPosition == 'right' ? win.left + win.width : win.left - WindowSize[enemyCount].width;
 
                     chrome.windows.create({
                         url: chrome.runtime.getURL("src/raid_info.html"),
@@ -151,7 +151,7 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
                 popupPosition = changes[key].newValue;
                 if (raidInfoWindow != null) {
                     chrome.windows.getCurrent(function (win) {
-                        var left = popupPosition == 'left' ? win.left + win.width : win.left - WindowSize[enemyCount].width;
+                        var left = popupPosition == 'right' ? win.left + win.width : win.left - WindowSize[enemyCount].width;
                         chrome.windows.update(raidInfoWindow.id, { left: Math.round(left) });
                     });
                 }
