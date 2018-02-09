@@ -71,7 +71,8 @@ var updateEnemyState = function ($el, enemyState) {
     // 보스 이미지 노출
     $el.find('.boss_portrait').attr('src', enemyState.getBossPortraitUrl());
     // 이름 및 주요 디버프 표기
-    $el.find('.boss_name').text(enemyState.name);
+    let bossNameKo = bossPattern.getBossName(enemyState.id);
+    $el.find('.boss_name').text(bossNameKo != null ? bossNameKo : enemyState.name);
     // 임시 패턴 존재 여부 정보 노출용
     // 패턴이 없는 보스일 경우 해당 보스의 ID 노출
     if (bossPattern.hasBossPattern(enemyState.id)) {
