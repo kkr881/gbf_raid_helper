@@ -19,11 +19,11 @@ var updateDisplay = function (enemyStateList) {
     }
 };
 
-var insertObjByEl = function($el, obj, pattern = null) {
-    if(obj == null) {
+var insertObjByEl = function ($el, obj, pattern = null) {
+    if (obj == null) {
         $el.removeClass('show');
     } else {
-        if(Array.isArray(obj.patternInfo)) {
+        if (Array.isArray(obj.patternInfo)) {
             $el.html(multiPatternTemplate(obj.patternInfo, obj.type));
         } else {
             $el.html(singlePatternTemplate(obj.patternInfo, pattern == 'trigger' ? obj.patternPerHp : null));
@@ -32,12 +32,12 @@ var insertObjByEl = function($el, obj, pattern = null) {
     }
 };
 
-var updatePatternArea = function($el, enemyState) {
-    if(!bossPattern.hasBossPattern(enemyState.id)) {
+var updatePatternArea = function ($el, enemyState) {
+    if (!bossPattern.hasBossPattern(enemyState.id)) {
         $el.parent().find('.enemy_pattern').removeClass('show');
         return false;
     }
-        
+
     // 공통 패턴 조회
     let $commonEl = $el.parent().find('.enemy_common_pattern');
     let enemyCommonObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "commonMode", enemyState.getPerHp());
@@ -74,9 +74,19 @@ var updateEnemyState = function ($el, enemyState) {
     $el.find('.boss_name').text(enemyState.name);
     // 임시 패턴 존재 여부 정보 노출용
     // 패턴이 없는 보스일 경우 해당 보스의 ID 노출
-    bossPattern.hasBossPattern(enemyState.id)
-        ? $el.find('.pattern_check').text(`패턴이 존재합니다.`)
-        : $el.find('.pattern_check').text(`패턴 없음. 보스 ID : ${enemyState.id}`);
+    if (bossPattern.hasBossPattern(enemyState.id)) {
+        $el.find('.pattern_check').text(`패턴이 존재합니다.`);
+    } else {
+        $el.find('.pattern_check').text(`패턴 없음. 보스 ID : ${enemyState.id}`);
+        let undefinedBossId = enemyState.id;
+        let undefinedBossName = enemyState.name;
+        let undefinedBoss = {};
+        undefinedBoss[undefinedBossId] = undefinedBossName;
+        chrome.storage.local.set(undefinedBoss, () => {
+            console.log('Undefined Boss Info Saved');
+        });
+    }
+
     if (enemyState.conditions.length > 0) {
         for (let debuffState of enemyDebuffStateList) {
             enemyState.conditions.includes(debuffState.id)
