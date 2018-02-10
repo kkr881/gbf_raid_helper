@@ -1,20 +1,17 @@
 "use strict";
 
-var updateDisplay = function (enemyStateList) {
+var updateDisplay = function (enemyStateList, raidState) {
     if (enemyStateList.length > 0) {
         ///updateBossContainer(enemyStateList.length);
         for (let [index, enemyState] of enemyStateList.entries()) {
-            if (enemyState.requireUpdate) {
-                var $bossEl = $('#enemy' + index).parents('.content');
-                // 이름 및 주요 디버프 표기
-                updateEnemyState($bossEl, enemyState);
-                // 프로그래스 바 표기
-                updateProgressBar($bossEl, enemyState);
-                // pattern 표기
-                updatePatternArea($bossEl, enemyState);
-                updateBossContainer(enemyStateList.length);
-                enemyState.requireUpdate = false;
-            }
+            var $bossEl = $('#enemy' + index).parents('.content');
+            // 이름 및 주요 디버프 표기
+            updateEnemyState($bossEl, enemyState);
+            // 프로그래스 바 표기
+            updateProgressBar($bossEl, enemyState);
+            // pattern 표기
+            updatePatternArea($bossEl, enemyState, raidState);
+            updateBossContainer(enemyStateList.length);
         }
     }
 };
@@ -24,7 +21,7 @@ var insertObjByEl = function ($el, obj, pattern = null) {
         $el.removeClass('show');
     } else {
         if (Array.isArray(obj.patternInfo)) {
-            $el.html(multiPatternTemplate(obj.patternInfo, obj.type));
+            $el.html(multiPatternTemplate(obj.patternInfo, obj.type, obj.turn));
         } else {
             $el.html(singlePatternTemplate(obj.patternInfo, pattern == 'trigger' ? obj.patternPerHp : null));
         }
@@ -32,20 +29,30 @@ var insertObjByEl = function ($el, obj, pattern = null) {
     }
 };
 
-var updatePatternArea = function ($el, enemyState) {
+var updatePatternArea = function ($el, enemyState, raidState) {
     if (!bossPattern.hasBossPattern(enemyState.id)) {
         $el.parent().find('.enemy_pattern').removeClass('show');
         return false;
     }
-
-    // 공통 패턴 조회
-    let $commonEl = $el.parent().find('.enemy_common_pattern');
-    let enemyCommonObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "commonMode", enemyState.getPerHp());
-    insertObjByEl($commonEl, enemyCommonObj);
-    // 차지턴 패턴 조회
-    let $chargeEl = $el.parent().find('.enemy_charge_pattern');
-    let enemyChargeObj = bossPattern.getTypeByPatternPerHp(enemyState.id, enemyState.getModeStatePatternType(), enemyState.getPerHp());
-    insertObjByEl($chargeEl, enemyChargeObj);
+    // 턴 패턴이 존재할 경우 공통 / 차지턴 패턴은 노출하지 않음
+    // 무조건 턴 패턴이 발동해야하므로
+    // 해당 조건에 대한 부분은 추가 확인 필요
+    // 턴 패턴 조회
+    let $turnEl = $el.parent().find('.enemy_turn_pattern');
+    let enemyTurnObj = bossPattern.getTurnPattern(enemyState.id, raidState.turn, enemyState.getPerHp());
+    console.log('enemyTurnObj is %s', Array.isArray(enemyTurnObj));
+    console.log(enemyTurnObj);
+    insertObjByEl($turnEl, enemyTurnObj);
+    if(enemyTurnObj == null) {
+        // 공통 패턴 조회
+        let $commonEl = $el.parent().find('.enemy_common_pattern');
+        let enemyCommonObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "commonMode", enemyState.getPerHp());
+        insertObjByEl($commonEl, enemyCommonObj);
+        // 차지턴 패턴 조회
+        let $chargeEl = $el.parent().find('.enemy_charge_pattern');
+        let enemyChargeObj = bossPattern.getTypeByPatternPerHp(enemyState.id, enemyState.getModeStatePatternType(), enemyState.getPerHp());
+        insertObjByEl($chargeEl, enemyChargeObj);
+    }
     // 체력 트리거 조회
     let $triggerEl = $el.parent().find('.enemy_trigger_pattern');
     let enemyTriggerObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "hpTrigger", enemyState.getPerHp());

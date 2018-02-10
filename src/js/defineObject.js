@@ -54,13 +54,16 @@ var WindowSize = {
 };
 
 // 차지 패턴이 복수일 수 있으므로 배열처리
-var multiPatternTemplate = function(patternArray, type) {
+var multiPatternTemplate = function(patternArray, type, turn = null) {
     if(typeof patternArray === 'undefined') {
         return '';
     }
     return `${patternArray.map(pattern => `
         <div class="header">${replaceNewLine(pattern.title, 'html')}</div>
-        <div class="meta">${type == 'commonMode' ? `공통 오의` : type == 'normalMode' ? `일반 오의` : `OVER DRIVE 오의`}</div>
+        <div class="meta">${type == 'commonMode' ? `공통 오의` : 
+                            type == 'normalMode' ? `일반 오의` :
+                            type == 'overDriveMode' ? `OVER DRIVE 오의` :
+                            type == 'turn' ? `${turn}턴에 발동` : ``}</div>
         <div class="description">${replaceNewLine(pattern.desc, 'html')}</div>
     `).join('<br>')}`;
 };

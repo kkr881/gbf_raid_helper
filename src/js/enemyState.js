@@ -10,7 +10,6 @@ class EnemyState {
         this.modeGauge = enemyData.gauge;
         this.hp = enemyData.hp;
         this.hpMax = enemyData.hpMax;
-        this.requireUpdate = true;
         this.mode = enemyData.mode;
         this.recast = enemyData.recast;
         this.recastMax = enemyData.recastMax;

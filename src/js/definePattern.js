@@ -19,8 +19,6 @@
         100:[{title:'',desc:''}]
     }
 },*/
-// 826100 : 세레마그HL
-// 600050 : 티아마그
 var bossPattern = {
     1: {
         name: 'Lv30 티아마트',
@@ -174,7 +172,7 @@ var bossPattern = {
             0: { title: '비고', desc: '언데드, 즉사 무효\n상태효과 새크리파이스\n보스에게 부여된 약화효과 갯수만큼\n공격력 7% 업/방어력 7% 다운\n턴 종료 시 고정 데미지' }
         },
         commonMode: {
-            50: { title: '모드: 이지스 머지', desc: '화속성 + 토속성 아군 전체 데미지\n아군 전체 공격력 다운' },
+            50: { title: '모드: 이지스 머지', desc: '보스에게 전속성 데미지 컷\n방어력 업, 약화내성 업\n재생(턴 당 65535) 부여' },
             0: { title: '액시스 문디', desc: '아군 전체 데미지\n어빌리티 봉인, 방어 다운 부여' }
         },
         normalMode: {
@@ -184,8 +182,14 @@ var bossPattern = {
         overDriveMode: {
             0: [{ title: '창세의 루믹스', desc: '아군 전체 데미지, 오의 봉인 부여\n보스의 체력 20만 회복' },
             { title: '액시스 문디', desc: '아군 전체 데미지\n어빌리티 봉인, 방어 다운 부여' }]
+        },
+        turn: {
+            1: [{
+                title: '모드: 이지스 머지', desc: '보스에게 전속성 데미지 컷\n방어력 업, 약화내성 업\n재생(턴 당 65535) 부여', option: { type: 'large', value: 50 }
+            }]
         }
     },
+
     11: {
         name: 'Lv30 세레스트',
         comment: {
@@ -199,7 +203,7 @@ var bossPattern = {
             0: [{ title: '보이드', desc: '아군 전체 언데드, 재생, 어빌리티 봉인 2턴' }]
         }
     },
-    12: {
+    812050: {
         name: 'Lv50 세레스트',
         comment: {
             0: { title: '비고', desc: '언데드 상태에서\nHP 회복효과를 받으면\n회복 수치만큼 데미지를 받음' }
@@ -229,10 +233,10 @@ var bossPattern = {
         commonMode: {
             75: [{ title: '검은 안개', desc: '아군 전체에 부패 5턴' }],
             50: [{ title: '어두운 감옥', desc: '단일 아군에게 그림자 3턴, 적개심 UP 3턴, 언데드 3턴 ' }],
-            0: [{ title: '안락사(발동률 높음)', desc: '아군 전체 수면 1~5턴, 언데드 5턴' }],
+            0: [{ title: '안락사(발동률 높음)', desc: '아군 전체 수면 1~5턴, 언데드 5턴' }]
         },
         normalMode: {
-            75: [{ title: '하얀 안개', desc: '전체 무속성 데미지(최대 체력의 5%), 3분간 보스의 약화 내성' }],
+            75: [{ title: '하얀 안개', desc: '전체 무속성 데미지(최대 체력의 5%)\n보스의 약화 내성(3분)' }],
             50: [{ title: '통합', desc: '보스에게 환영(무제한)' }],
             0: [{ title: '나락의 폴 다운', desc: '아군 전체 암속성 데미지, 어빌리티 봉인 3턴' }]
         },
@@ -242,12 +246,64 @@ var bossPattern = {
             0: [{ title: '보이드 올', desc: '아군 전체 HP 전부 회복, 부패 6턴(턴당 데미지 300), 암흑 5턴' }]
         }
     },
+    9900505: {
+        name: '훈련용 터렛γ',
+        hpTrigger: {
+            90: { title: 'HP90 트리거', desc: 'HP가 90이상일때만 노출' }
+        },
+        comment: {
+            90: { title: 'HP90 안내', desc: 'HP가 90이상일때만 노출' },
+            0: { title: 'HP0 안내', desc: 'HP가 90 미만 0이상일때만 노출' }
+        },
+        commonMode: {
+            90: [{ title: 'HP90 공통 패턴', desc: 'HP가 90이상일때만 노출' }],
+            0: [{ title: 'HP0 공통 패턴', desc: 'HP가 90 미만 0이상일때만 노출' }]
+        },
+        normalMode: {
+            90: [{ title: 'HP90 일반 패턴', desc: 'HP가 90이상일때만 노출' }],
+            0: [{ title: 'HP0 일반 패턴', desc: 'HP가 90 미만 0이상일때만 노출' }]
+        },
+        overDriveMode: {
+            90: [{ title: 'HP90 OD 패턴', desc: 'HP가 90이상일때만 노출' }],
+            0: [{ title: 'HP0 OD 패턴', desc: 'HP가 90 미만 0이상일때만 노출' }]
+        },
+        turn: {
+            1: [{
+                title: '턴 트리거 테스트용', desc: 'HP가 90이상일때만 노출', option: { type: 'large', value: 90 }
+            }]
+        }
+    },
     // 패턴 존재 여부 체크
     hasBossPattern: function (id) {
         return this[id] != undefined ? true : false;
     },
     getBossName: function (id) {
         return this[id] != undefined ? this[id].name : null;
+    },
+    isShowTurnPattern: function (pattern, perHp) {
+        let patternOption = pattern.option;
+        let isShow = false;
+        switch (patternOption.type) {
+            case 'large':
+                isShow = perHp > patternOption.value ? true : false;
+                break;
+            case 'small':
+                isShow = perHp < patternOption.value ? true : false;
+                break;
+        }
+        return isShow;
+    },
+    getTurnPattern: function (id, turn, perHp) {
+        let turnPattern = this[id]["turn"] != undefined && this[id]["turn"][turn] != undefined ? this[id]["turn"][turn] : null;
+        if (turnPattern != null && this.isShowTurnPattern(turnPattern[0], perHp)) {
+            return {
+                type: 'turn',
+                turn: turn,
+                patternInfo : turnPattern
+            }
+        } else {
+            return null;
+        }
     },
     getTypeByPatternPerHp: function (id, patternType, perHp) {
         if (typeof this[id][patternType] === 'undefined') {
@@ -287,6 +343,7 @@ var bossPattern = {
         return {
             patternPerHp: nowPatternPerHp,
             type: patternType,
+            turn: null,
             patternInfo: this[id][patternType][nowPatternPerHp]
         };
     }
