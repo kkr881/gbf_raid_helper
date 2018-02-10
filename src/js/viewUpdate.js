@@ -40,10 +40,19 @@ var updatePatternArea = function ($el, enemyState, raidState) {
     // 턴 패턴 조회
     let $turnEl = $el.parent().find('.enemy_turn_pattern');
     let enemyTurnObj = bossPattern.getTurnPattern(enemyState.id, raidState.turn, enemyState.getPerHp());
-    console.log('enemyTurnObj is %s', Array.isArray(enemyTurnObj));
-    console.log(enemyTurnObj);
     insertObjByEl($turnEl, enemyTurnObj);
-    if(enemyTurnObj == null) {
+    // 파티 버프 패턴 조회
+    // 파티 디버프 패턴 조회
+    let $debuffEl = $el.parent().find('.enemy_debuff_pattern');
+    let enemyDebuffObj = bossPattern.getDebuffPattern(enemyState.id, raidState.partyDebuffList, enemyState.getPerHp());
+    insertObjByEl($debuffEl, enemyDebuffObj);
+    // 턴, 버프, 디버프 패턴은 최우선순위로 가정
+    // 해당 가정이 틀릴 경우 수정이 필요하나 현재 확인이 불가
+    if(enemyTurnObj == null && enemyDebuffObj == null) {
+        // 보스 상태에 따른 패턴 조회
+        let $conditionEl = $el.parent().find('.enemy_condition_pattern');
+        let enemyConditionObj = bossPattern.getConditionPattern(enemyState.id, enemyState.conditions, enemyState.getPerHp());
+        insertObjByEl($conditionEl, enemyConditionObj);
         // 공통 패턴 조회
         let $commonEl = $el.parent().find('.enemy_common_pattern');
         let enemyCommonObj = bossPattern.getTypeByPatternPerHp(enemyState.id, "commonMode", enemyState.getPerHp());

@@ -63,6 +63,8 @@ var multiPatternTemplate = function(patternArray, type, turn = null) {
         <div class="meta">${type == 'commonMode' ? `공통 오의` : 
                             type == 'normalMode' ? `일반 오의` :
                             type == 'overDriveMode' ? `OVER DRIVE 오의` :
+                            type == 'condition' ? `보스 상태 패턴` :
+                            type == 'partyDebuff' ? `파티 디버프 패턴` :
                             type == 'turn' ? `${turn}턴에 발동` : ``}</div>
         <div class="description">${replaceNewLine(pattern.desc, 'html')}</div>
     `).join('<br>')}`;
